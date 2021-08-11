@@ -168,7 +168,7 @@ double temp() {
 
   MENU(mainMenu, "Main Menu", doNothing, noEvent,wrapStyle
     ,OP("Fill", fillCycle,enterEvent)
-    ,OP("Nothing", doNothing,noEvent)
+    ,OP("Nothing", doNothing,noEvent) // This one just displays a - cursor instead of a > and if I add a function to it, does nothing
     ,OP("Heat", heatCycle,enterEvent)
     ,OP("Run", runCycle,enterEvent)
     ,OP("Drain", drainCycle,enterEvent)

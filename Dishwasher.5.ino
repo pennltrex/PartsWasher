@@ -68,6 +68,7 @@ http://playground.arduino.cc/Code/LCD3wires
 #define SERIESRESISTOR 10000    
 
 int samples[NUMSAMPLES];
+float steinhart;
 
 double temp() {
   uint8_t i;
@@ -86,14 +87,14 @@ double temp() {
   }
   average /= NUMSAMPLES;
 
-  Serial.print("Average analog reading "); 
-  Serial.println(average);
+  //Serial.print("Average analog reading "); 
+  //Serial.println(average);
   
   // convert the value to resistance
   average = 1023 / average - 1;
   average = SERIESRESISTOR / average;
-  Serial.print("Thermistor resistance "); 
-  Serial.println(average);
+  //Serial.print("Thermistor resistance "); 
+  //Serial.println(average);
   
   float steinhart;
   steinhart = average / THERMISTORNOMINAL;     // (R/Ro)
@@ -103,8 +104,11 @@ double temp() {
   steinhart = 1.0 / steinhart;                 // Invert
   steinhart -= 273.15;                         // convert absolute temp to C
 // steinhart = (steinhart * 9/5) + 32;        // conver C to F
-  
+  //Serial.println(steinhart);
+  return steinhart;
 }
+
+
 // Initials states for the relays
   int ledCtrl=LOW;
 
@@ -134,10 +138,7 @@ double temp() {
   result runCycle() {
     WaterIn=HIGH;
     WashMotor=LOW;
-    while (temp() <= 65)
-    {
-      Heater=HIGH;
-    }
+    Heater=LOW;
     WaterOut=HIGH;
     return proceed;
   }
@@ -159,6 +160,13 @@ double temp() {
     return proceed;
   }
 
+  result blinkLED() {
+    ledCtrl=HIGH;
+    delay(1000);
+    ledCtrl=LOW;
+    delay(1000);
+  }
+
 
 // MENU(mainMenu, "Blink menu", Menu::doNothing, Menu::noEvent, Menu::wrapStyle
 //   ,FIELD(timeOn,"On","ms",0,1000,10,1, Menu::doNothing, Menu::noEvent, Menu::noStyle)
@@ -168,7 +176,7 @@ double temp() {
 
   MENU(mainMenu, "Main Menu", doNothing, noEvent,wrapStyle
     ,OP("Fill", fillCycle,enterEvent)
-    ,OP("Nothing", doNothing,noEvent) // This one just displays a - cursor instead of a > and if I add a function to it, does nothing
+    ,OP("Blink", blinkLED,enterEvent) // This one just displays a - cursor instead of a > and if I add a function to it, does nothing
     ,OP("Heat", heatCycle,enterEvent)
     ,OP("Run", runCycle,enterEvent)
     ,OP("Drain", drainCycle,enterEvent)
@@ -195,6 +203,7 @@ double temp() {
   }
   
   void setup() {
+    analogReference(EXTERNAL);
     digitalWrite(RELAY1, HIGH);
     digitalWrite(RELAY2, HIGH);
     digitalWrite(RELAY3, HIGH);
@@ -222,6 +231,11 @@ double temp() {
   }
 
   void loop() {
+    if (Heater == LOW && temp() > 26)
+    {
+      Heater=HIGH;
+    }
+    Serial.println(temp());
     nav.poll();
     digitalWrite(LEDPIN, ledCtrl);
     digitalWrite(RELAY1, WaterIn);

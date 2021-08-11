@@ -57,6 +57,6 @@ double temp() {
   steinhart = 1.0 / steinhart;                 // Invert
   steinhart -= 273.15;                         // convert absolute temp to C
   steinhart = (steinhart * 9/5) + 32;
-
+  
   
 }

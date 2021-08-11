@@ -19,7 +19,7 @@
                 "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/variants/standard",
                 "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/libraries/Wire/src",
                 "/Users/noexit/Documents/Arduino/libraries/Newliquidcrystal_1.3.5",
-                "/Users/noexit/Documents/Arduino/libraries/ArduinoMenu_library/src",
+                "/Users/noexit/Documents/Arduino/libraries/ArduinoMenu-master/src",
                 "/Users/noexit/Documents/Arduino/libraries/PCINT-master/src",
                 "/Applications/Arduino.app/Contents/Java/hardware/tools/avr/lib/gcc/avr/7.3.0/include",
                 "/Applications/Arduino.app/Contents/Java/hardware/tools/avr/lib/gcc/avr/7.3.0/include-fixed",

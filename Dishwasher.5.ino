@@ -114,14 +114,15 @@ double temp() {
 
   int WaterIn=HIGH;
   int WashMotor=HIGH;
-  int Heater=HIGH;
+  // int Heater=HIGH;
+  bool EnableHeater=false;
   int WaterOut=HIGH;
 
 
   result fillCycle() {
     WaterIn=LOW;
     WashMotor=HIGH;
-    Heater=HIGH;
+    // Heater=HIGH;
     WaterOut=HIGH;
     ledCtrl=HIGH;
     return proceed;
@@ -130,7 +131,8 @@ double temp() {
   result heatCycle() {
     WaterIn=HIGH;
     WashMotor=HIGH;
-    Heater=LOW;
+    // Heater=LOW;
+    EnableHeater=true;
     WaterOut=HIGH;
     return proceed;
   }
@@ -138,7 +140,9 @@ double temp() {
   result runCycle() {
     WaterIn=HIGH;
     WashMotor=LOW;
-    Heater=LOW;
+    EnableHeater=true;
+    // Heater=LOW;
+
     WaterOut=HIGH;
     return proceed;
   }
@@ -146,7 +150,7 @@ double temp() {
   result drainCycle() {
     WaterIn=HIGH;
     WashMotor=HIGH;
-    Heater=HIGH;
+    // Heater=HIGH;
     WaterOut=LOW;
     return proceed;
   }
@@ -154,7 +158,7 @@ double temp() {
   result offCycle() {
     WaterIn=HIGH;
     WashMotor=HIGH;
-    Heater=HIGH;
+    // Heater=HIGH;
     WaterOut=HIGH;
     ledCtrl=LOW;
     return proceed;
@@ -231,16 +235,22 @@ double temp() {
   }
 
   void loop() {
-    if (Heater == LOW && temp() > 26)
-    {
-      Heater=HIGH;
-    }
+    if(EnableHeater==true) {
+       if(temp() > 30) {
+          digitalWrite(RELAY3, HIGH); 
+          } else { digitalWrite(RELAY3, LOW); 
+          }
+      }
+    // if (Heater == LOW && temp() > 26)
+    // {
+    //   Heater=HIGH;
+    // }
     Serial.println(temp());
     nav.poll();
     digitalWrite(LEDPIN, ledCtrl);
     digitalWrite(RELAY1, WaterIn);
     digitalWrite(RELAY2, WashMotor);
-    digitalWrite(RELAY3, Heater);
+    // digitalWrite(RELAY3, Heater);
     digitalWrite(RELAY4, WaterOut);
     //delay(100);//simulate a delay as if other tasks are running
   }
